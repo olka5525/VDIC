@@ -1,2 +1,2 @@
 -F dut.f
-tinyalu_tb.sv
+alu_tb.sv

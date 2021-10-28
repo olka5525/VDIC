@@ -1,0 +1,42 @@
+TOOL:	xrun	19.09-s003: Started on Oct 28, 2021 at 16:58:12 CEST
+xrun
+	-elaborate
+	-l xrun_elaborate.log
+	-F tb.f
+		-F ./dut.f
+			./mtm_Alu.vp
+		alu_tb.sv
+	-v93
+	+nowarnDSEM2009
+	+nowarnDSEMEL
+	+nowarnCGDEFN
+	-xmlibdirname INCA_libs
+	+overwrite
+	-nocopyright
+		Caching library 'worklib' ....... Done
+	Elaborating the design hierarchy:
+	Top level design units:
+		top
+	Building instance overlay tables: .................... Done
+	Generating native compiled code:
+			streams:   7, words:  3942
+			streams:   9, words: 25571
+			streams:   7, words:  3261
+		worklib.top:sv <0x4580b457>
+			streams:  15, words: 37258
+	Building instance specific data structures.
+	Loading native compiled code:     .................... Done
+	Design hierarchy summary:
+		                 Instances  Unique
+		Modules:                 5       5
+		Registers:             124     124
+		Scalar wires:            8       -
+		Vectored wires:          2       -
+		Always blocks:          12      12
+		Initial blocks:          3       3
+		Final blocks:            1       1
+		Pseudo assignments:      2       2
+		Assertions:              6       6
+		Simulation timescale:  1ps
+	Writing initial simulation snapshot: worklib.top:sv
+TOOL:	xrun	19.09-s003: Exiting on Oct 28, 2021 at 16:58:12 CEST  (total: 00:00:00)
