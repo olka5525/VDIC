@@ -20,7 +20,7 @@ module top;
 	bit                         clk;
 	bit                         rst_n;
 	bit                         sin;
-	bit                         sout;
+	bit                         sout; //logic #todo logic
 	reg                 [98:0]  in;
 	reg                 [54:0]  out;
 
