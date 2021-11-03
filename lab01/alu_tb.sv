@@ -20,9 +20,9 @@ module top;
 	bit                         clk;
 	bit                         rst_n;
 	bit                         sin;
-	bit                         sout; //logic #todo logic
-	reg                 [98:0]  in;
-	reg                 [54:0]  out;
+	logic                       sout; 
+	bit                 [98:0]  in;
+	logic               [54:0]  out;
 
 	bit                 [31:0]  expected;
 	bit                 [3:0]   flags_expected;
@@ -109,7 +109,7 @@ module top;
 		reset_alu();
 		@(negedge clk);
 		sin =1'b1;
-		repeat (500) begin : tester_main
+		repeat (5) begin : tester_main
 			@(negedge clk);
 			op_set = get_op();
 			A      = get_data();
@@ -122,7 +122,7 @@ module top;
 				default:  package_n = 9;
 			endcase
 
-			package_n = 9;
+			//package_n = 9;
 			BA = {B,A};
 			out = '0;
 			crc_ok = 1'b1;
@@ -148,17 +148,19 @@ module top;
 			end
 			in[10:0] = {3'b010, op_set, CRC, 1'b1};
 
-			//for (int i=98; i>=99-package_n*11; i--) begin
+			//for (int i=98; i<=99-package_n*11; i--) begin
 //			for (int i=98; i>=0; i--) begin
 //				@(negedge clk);
 //				sin=in[i];
 //			end
-			
+			package_n =8;
 			for (int i=0; i<11*package_n; i++) begin
 				@(negedge clk);
+				
 				sin=in[98-i];
+				$display("i = %0d", i);
 			end
-
+			$display("for end");
 			@(negedge sout);
 
 			for (int i=0; i<55; i++) begin
