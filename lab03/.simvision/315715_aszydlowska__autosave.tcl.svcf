@@ -1,0 +1,161 @@
+
+#
+# Preferences
+#
+preferences set toolbar-Standard-WatchWindow {
+  usual
+  shown 0
+}
+preferences set plugin-enable-svdatabrowser-new 1
+preferences set toolbar-Windows-WatchWindow {
+  usual
+  shown 0
+}
+preferences set toolbar-Standard-Console {
+  usual
+  position -pos 1
+}
+preferences set toolbar-Search-Console {
+  usual
+  position -pos 2
+}
+preferences set toolbar-Standard-WaveWindow {
+  usual
+  position -pos 1
+}
+preferences set plugin-enable-groupscope 0
+preferences set plugin-enable-interleaveandcompare 0
+preferences set plugin-enable-waveformfrequencyplot 0
+preferences set toolbar-SimControl-WatchWindow {
+  usual
+  shown 0
+}
+preferences set toolbar-TimeSearch-WatchWindow {
+  usual
+  shown 0
+}
+
+#
+# Mnemonic Maps
+#
+mmap new  -reuse -name {Boolean as Logic} -radix %b -contents {{%c=FALSE -edgepriority 1 -shape low}
+{%c=TRUE -edgepriority 1 -shape high}}
+mmap new  -reuse -name {Example Map} -radix %x -contents {{%b=11???? -bgcolor orange -label REG:%x -linecolor yellow -shape bus}
+{%x=1F -bgcolor red -label ERROR -linecolor white -shape EVENT}
+{%x=2C -bgcolor red -label ERROR -linecolor white -shape EVENT}
+{%x=* -label %x -linecolor gray -shape bus}}
+
+#
+# Waveform windows
+#
+if {[catch {window new WaveWindow -name "Waveform 1" -geometry 1920x923+0+31}] != ""} {
+    window geometry "Waveform 1" 1920x923+0+31
+}
+window target "Waveform 1" on
+waveform using {Waveform 1}
+waveform sidebar visibility partial
+waveform set \
+    -primarycursor TimeA \
+    -signalnames name \
+    -signalwidth 175 \
+    -units ps \
+    -valuewidth 75
+waveform baseline set -time 0
+
+set id [waveform add -signals  {
+	simulator::top.A
+	} ]
+set id [waveform add -signals  {
+	simulator::top.B
+	} ]
+set id [waveform add -signals  {
+	simulator::top.BA
+	} ]
+set id [waveform add -signals  {
+	simulator::top.CRC
+	} ]
+set id [waveform add -signals  {
+	simulator::top.clk
+	} ]
+set id [waveform add -signals  {
+	simulator::top.crc_expected
+	} ]
+set id [waveform add -signals  {
+	simulator::top.crc_ok
+	} ]
+set id [waveform add -signals  {
+	simulator::top.crc_out
+	} ]
+set id [waveform add -signals  {
+	simulator::top.done
+	} ]
+set id [waveform add -signals  {
+	simulator::top.error
+	} ]
+set id [waveform add -signals  {
+	simulator::top.error_expected
+	} ]
+set id [waveform add -signals  {
+	simulator::top.expected
+	} ]
+set id [waveform add -signals  {
+	simulator::top.flags
+	} ]
+set id [waveform add -signals  {
+	simulator::top.flags_expected
+	} ]
+set id [waveform add -signals  {
+	simulator::top.in
+	} ]
+set id [waveform add -signals  {
+	simulator::top.op_set
+	} ]
+waveform hierarchy collapse $id
+set id [waveform add -signals  {
+	simulator::top.operation_t
+	} ]
+set id [waveform add -signals  {
+	{simulator::top.out[54:0]}
+	} ]
+waveform hierarchy collapse $id
+set id [waveform add -signals  {
+	simulator::top.package_n
+	} ]
+set id [waveform add -signals  {
+	simulator::top.random_crc
+	} ]
+set id [waveform add -signals  {
+	simulator::top.random_num
+	} ]
+set id [waveform add -signals  {
+	simulator::top.result
+	} ]
+waveform hierarchy collapse $id
+set id [waveform add -signals  {
+	simulator::top.rst_n
+	} ]
+set id [waveform add -signals  {
+	simulator::top.sin
+	} ]
+set id [waveform add -signals  {
+	simulator::top.sout
+	} ]
+set id [waveform add -signals  {
+	simulator::top.test_result
+	} ]
+
+waveform xview limits 0 3400000ps
+
+#
+# Waveform Window Links
+#
+
+#
+# Console windows
+#
+console set -windowname Console
+window geometry Console 730x250+261+564
+
+#
+# Layout selection
+#

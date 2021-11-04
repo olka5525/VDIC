@@ -1,0 +1,68 @@
+TOOL:	xrun	19.09-s003: Started on Nov 04, 2021 at 12:49:00 CET
+xrun
+	-F tb.f
+		-F ./dut.f
+			./mtm_Alu.vp
+		alu_tb.sv
+	-v93
+	+nowarnDSEM2009
+	+nowarnDSEMEL
+	+nowarnCGDEFN
+	-xmlibdirname INCA_libs_gui
+	+access+r
+	+gui
+	+overwrite
+	-nocopyright
+	-l xrun_gui.log
+	-s
+Recompiling... reason: file './alu_tb.sv' is newer than expected.
+	expected: Thu Nov  4 12:48:18 2021
+	actual:   Thu Nov  4 12:48:46 2021
+file: ./alu_tb.sv
+	module worklib.top:sv
+		errors: 0, warnings: 0
+		Caching library 'worklib' ....... Done
+	Elaborating the design hierarchy:
+	Top level design units:
+		top
+	Building instance overlay tables: .................... Done
+	Generating native compiled code:
+		worklib.top:sv <0x6bc27022>
+			streams:  27, words: 58088
+	Building instance specific data structures.
+xmelab: *W,OBINRGT: (File: ./alu_tb.sv, Line : 100): Some of the values in bin range '[1 : 4294967294]' of bin 'top.zeros_or_ones_on_ops.a_leg.others' are not within the possible values that coverpoint can store. Range will be modified to '[1 : 2147483647]'.
+xmelab: *W,OBINRGT: (File: ./alu_tb.sv, Line : 106): Some of the values in bin range '[1 : 4294967294]' of bin 'top.zeros_or_ones_on_ops.b_leg.others' are not within the possible values that coverpoint can store. Range will be modified to '[1 : 2147483647]'.
+	Loading native compiled code:     .................... Done
+	Design hierarchy summary:
+		                 Instances  Unique
+		Modules:                 5       5
+		Registers:             133     133
+		Scalar wires:            8       -
+		Vectored wires:          2       -
+		Always blocks:          13      13
+		Initial blocks:          6       6
+		Final blocks:            1       1
+		Pseudo assignments:      2       2
+		Assertions:              6       6
+		Covergroup Instances:    0       4
+		Simulation timescale:  1ps
+	Writing initial simulation snapshot: worklib.top:sv
+xmsim: *W,XCLGNOPTM: The SystemVerilog constraint solver Xceligen options 'seed_only_rand and process_alternate_rng and ignore_worklib_name' are not specified and will default to 0. The recommended value for each of them is 1 which will become the default in a future release.
+SVSEED default: 1
+xmsim: *W,RNDXCELON: Xceligen, the new SystemVerilog constraint solver is used. Disabling Xceligen and using the legacy constraint solver is possible with "xrun/xmsim -xceligen on=0 ...".
+xcelium> 
+xcelium> source /cad/XCELIUM1909/tools/xcelium/files/xmsimrc
+xcelium> 
+-------------------------------------
+Relinquished control to SimVision...
+# Restoring simulation environment...
+xcelium> input -quiet .reinvoke.sim
+xcelium> file delete .reinvoke.sim
+xcelium> run
+Passed
+Test PASSED.
+Simulation complete via $finish(1) at time 2374140 NS + 0
+./alu_tb.sv:519 		$finish;
+xcelium> ^C
+xcelium> exit
+TOOL:	xrun	19.09-s003: Exiting on Nov 04, 2021 at 12:49:12 CET  (total: 00:00:12)
