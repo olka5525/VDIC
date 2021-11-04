@@ -1,3 +1,6 @@
-IMC(64): 19.09-s002: (c) Copyright 1995-2019 Cadence Design Systems Inc - Simulator version: 19.09-s003 - Coverage engine version: 19.09-s003
-imc: *I,RUNLD: Successfully loaded run cov_work/scope/merged_results.
-Starting gui mode
+imc: *I,RUNLD: Successfully loaded run /home/student/aszydlowska/VDIC/lab02/cov_work/scope/merged_results.
+imc: *W,REPDEP: This is a legacy report and no future enhancement is planned for this report. It is recommended that you use the 'report_metrics' command and generate a dynamic report.
+name                                     Overall Average      Overall Covered      Code Average         Code Covered         Fsm Average          Fsm Covered          Functional Average   Functional Covered   
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+top                                      14.86%               7.67% (89/1160/2)    14.25%               6.84% (73/1068/2)    n/a                  n/a                  15.47%               17.39% (16/92)       
+|--ALU                                   46.43%               46.43% (26/56)       46.43%               46.43% (26/56)       n/a                  n/a                  n/a                  n/a                  

@@ -3,8 +3,8 @@ module top;
 
 //------------------------------------------------------------------------------
 // type and variable definitions
-//------------------------------------------------------------------------------
 
+//------------------------------------------------------------------------------
 	typedef enum bit[2:0] {
 		and_op                      = 3'b000,
 		or_op                       = 3'b001,
@@ -39,6 +39,8 @@ module top;
 	bit                 [5:0]   error;
 	bit                 [5:0]   error_expected;
 
+	bit                         done='0;
+	bit                         correct='0;
 	bit                 [9:0]   random_crc;
 	bit                 [9:0]   random_num;
 
@@ -274,15 +276,15 @@ module top;
 
 	op_cov                      oc;
 	zeros_or_ones_on_ops        c_00_FF;
-	error_cov 					ec;
-	flag_cov					fc;
+	error_cov                   ec;
+	flag_cov                    fc;
 
 	initial begin : coverage
 		oc      = new();
 		c_00_FF = new();
-		ec		= new();
-		fc		= new();
-		
+		ec      = new();
+		fc      = new();
+
 		forever begin : sample_cov
 			@(posedge clk);
 			oc.sample();
@@ -344,7 +346,7 @@ module top;
 
 	initial begin : tester
 		reset_alu();
-		repeat (1000) begin : tester_main
+		repeat (5) begin : tester_main
 			@(negedge clk);
 			op_set = get_op();
 			A      = get_data();
@@ -357,9 +359,9 @@ module top;
 				default:  package_n = 9;
 			endcase
 
-			//package_n = 9;
 			BA = {B,A};
 			out = '0;
+			result = '0;
 			crc_ok = 1'b1;
 			CRC = CalculateCRC_4({BA,1'b1,op_set});
 
@@ -414,81 +416,100 @@ module top;
 							@(negedge clk);
 							out[54-i]= sout;
 						end
-					end
-					@(negedge clk);
 
-					if (out[54:53] == 'b00) begin //correct
+						@(negedge clk);
 
 						for (int i=0; i<4; i++) begin
 							result[31-(8*i)-:8] = out [52-(11*i)-:8];
 						end
 						flags = out[7:4];
 						crc_out = out[3:1];
-
-						begin
-							expected = get_expected( B,A, op_set);
-							assert(result === expected)
-							else begin
-								$display("Test FAILED for A=%0d B=%0d op_set=%0d", A, B, op_set);
-								$display("Expected: %d  received: %d", expected, result);
-								test_result = "FAILED";
-							end
-
-
-
-							flags_expected = get_flags( B,A, op_set);
-							assert(flags === flags_expected)
-							else begin
-								$display("Test FAILED for A=%0d B=%0d op_set=%0d", A, B, op_set);
-								$display("Flags expected: %d  received: %d", flags_expected, flags);
-								test_result = "FAILED";
-							end
-
-
-							crc_expected = CalculateCRC_3( {expected, 1'b0, flags_expected});
-							assert(crc_out === crc_expected)
-							else begin
-								$display("Test FAILED for A=%0d B=%0d op_set=%0d", B, A, op_set);
-								$display("CRC expected: %d  received: %d", crc_expected, crc_out);
-								test_result = "FAILED";
-							end
-
-
-						end
+						correct = '1;
 					end
-					else begin //error
-
-
+					else begin
 						error = out[51:46];
-
-						error_expected = get_error(crc_ok, package_n, op_set);
-						if          (error[0])
-							assert(error_expected[0] === error[0])
-							else    begin
-								$display("Test FAILED for A=%0d B=%0d op_set=%3b", B, A, op_set);
-								$display("Error expected: %6b  received: %6b", error_expected, error);
-								test_result = "FAILED";
-							end
-						else if     (error[1])
-							assert(error_expected[1] === error[1])
-							else    begin
-								$display("Test FAILED for A=%0d B=%0d op_set=%3b", B, A, op_set);
-								$display("Error expected: %6b  received: %6b", error_expected, error);
-								test_result = "FAILED";
-							end
-						else if     (error[2])
-							assert(error_expected[2] === error[2])
-							else begin
-								$display("Test FAILED for A=%0d B=%0d op_set=%3b", B, A, op_set);
-								$display("Error expected: %6b  received: %6b", error_expected, error);
-								test_result = "FAILED";
-							end
-						else test_result = "FAILED";
-
-
+						correct = '0;
 					end
 
+					@(negedge clk);
+					@(negedge clk);
+
+					done ='1;
+
+				//@(negedge clk);
+
+//                  if (out[54:53] == 'b00) begin //correct
+//
+//                      for (int i=0; i<4; i++) begin
+//                          result[31-(8*i)-:8] = out [52-(11*i)-:8];
+//                      end
+//                      flags = out[7:4];
+//                      crc_out = out[3:1];
+//
+//                      begin
+//                          expected = get_expected( B,A, op_set);
+//                          assert(result === expected)
+//                          else begin
+//                              $display("Test FAILED for A=%0d B=%0d op_set=%0d", A, B, op_set);
+//                              $display("Expected: %d  received: %d", expected, result);
+//                              test_result = "FAILED";
+//                          end
+//
+//
+//
+//                          flags_expected = get_flags( B,A, op_set);
+//                          assert(flags === flags_expected)
+//                          else begin
+//                              $display("Test FAILED for A=%0d B=%0d op_set=%0d", A, B, op_set);
+//                              $display("Flags expected: %d  received: %d", flags_expected, flags);
+//                              test_result = "FAILED";
+//                          end
+//
+//
+//                          crc_expected = CalculateCRC_3( {expected, 1'b0, flags_expected});
+//                          assert(crc_out === crc_expected)
+//                          else begin
+//                              $display("Test FAILED for A=%0d B=%0d op_set=%0d", B, A, op_set);
+//                              $display("CRC expected: %d  received: %d", crc_expected, crc_out);
+//                              test_result = "FAILED";
+//                          end
+//
+//
+//                      end
+//                  end
+//                  else begin //error
+//
+//
+//                      error = out[51:46];
+//
+//                      error_expected = get_error(crc_ok, package_n, op_set);
+//                      if          (error[0])
+//                          assert(error_expected[0] === error[0])
+//                          else    begin
+//                              $display("Test FAILED for A=%0d B=%0d op_set=%3b", B, A, op_set);
+//                              $display("Error expected: %6b  received: %6b", error_expected, error);
+//                              test_result = "FAILED";
+//                          end
+//                      else if     (error[1])
+//                          assert(error_expected[1] === error[1])
+//                          else    begin
+//                              $display("Test FAILED for A=%0d B=%0d op_set=%3b", B, A, op_set);
+//                              $display("Error expected: %6b  received: %6b", error_expected, error);
+//                              test_result = "FAILED";
+//                          end
+//                      else if     (error[2])
+//                          assert(error_expected[2] === error[2])
+//                          else begin
+//                              $display("Test FAILED for A=%0d B=%0d op_set=%3b", B, A, op_set);
+//                              $display("Error expected: %6b  received: %6b", error_expected, error);
+//                              test_result = "FAILED";
+//                          end
+//                      else test_result = "FAILED";
+//
+//
 				end
+
+
 			endcase
 			if($get_coverage() == 100) break;
 		end
@@ -515,20 +536,81 @@ module top;
 
 
 	always @(negedge clk) begin : scoreboard
-		shortint predicted_result;
+		if(done) begin:verify_result
+			bit                 [31:0]  expected;
+			bit                 [3:0]   flags_expected;
+			bit                 [2:0]   crc_expected;
+			//bit         signed  [31:0]  result;
+			//bit                 [3:0]   flags;
+			//bit                 [2:0]   crc_out;
+			//bit                 [3:0]   CRC;
 
-		predicted_result = get_expected(A, B, op_set);
+			//bit                         crc_ok;
+			//bit                 [5:0]   error;
+			bit                 [5:0]   error_expected;
+			automatic  string           test_result = "PASSED";
 
-		CHK_RESULT: assert(result === predicted_result) begin
-		   `ifdef DEBUG
-			$display("%0t Test passed for A=%0d B=%0d op_set=%0d", $time, A, B, op);
-		   `endif
+			if (correct) begin
+
+				begin
+					expected = get_expected( B,A, op_set);
+					CHK_RESULT: assert(result === expected)
+					else begin
+						$display("Test FAILED for A=%0d B=%0d op_set=%0d", A, B, op_set);
+						$display("Expected: %d  received: %d", expected, result);
+						test_result = "FAILED";
+					end
+
+
+
+					flags_expected = get_flags( B,A, op_set);
+					CHK_FLAG: assert(flags === flags_expected)
+					else begin
+						$display("Test FAILED for A=%0d B=%0d op_set=%0d", A, B, op_set);
+						$display("Flags expected: %d  received: %d", flags_expected, flags);
+						test_result = "FAILED";
+					end
+
+
+					crc_expected = CalculateCRC_3( {expected, 1'b0, flags_expected});
+					CHK_CRC:  assert(crc_out === crc_expected)
+					else begin
+						$display("Test FAILED for A=%0d B=%0d op_set=%0d", B, A, op_set);
+						$display("CRC expected: %d  received: %d", crc_expected, crc_out);
+						test_result = "FAILED";
+					end
+
+
+				end
+			end
+			else begin //error
+
+				error_expected = get_error(crc_ok, package_n, op_set);
+				if          (error[0])
+					CHK_ERROR_OP:  assert(error_expected[0] === error[0])
+					else    begin
+						$display("Test FAILED for A=%0d B=%0d op_set=%3b", B, A, op_set);
+						$display("Error expected: %6b  received: %6b", error_expected, error);
+						test_result = "FAILED";
+					end
+				else if     (error[1])
+					CHK_ERROR_CRC: assert(error_expected[1] === error[1])
+					else    begin
+						$display("Test FAILED for A=%0d B=%0d op_set=%3b", B, A, op_set);
+						$display("Error expected: %6b  received: %6b", error_expected, error);
+						test_result = "FAILED";
+					end
+				else if     (error[2])
+					CHK_ERROR_DATA: assert(error_expected[2] === error[2])
+					else begin
+						$display("Test FAILED for A=%0d B=%0d op_set=%3b", B, A, op_set);
+						$display("Error expected: %6b  received: %6b", error_expected, error);
+						test_result = "FAILED";
+					end
+				else test_result = "FAILED";
+
+			end
 		end
-		else begin
-			$warning("%0t Test FAILED for A=%0d B=%0d op_set=%0d\nExpected: %d  received: %d",
-				$time, A, B, op_set , predicted_result, result);
-		end;
-
 	end : scoreboard
 
 //------------------------------------------------------------------------------

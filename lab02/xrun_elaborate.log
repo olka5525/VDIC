@@ -1,4 +1,4 @@
-TOOL:	xrun	19.09-s003: Started on Nov 04, 2021 at 01:13:52 CET
+TOOL:	xrun	19.09-s003: Started on Nov 04, 2021 at 02:16:35 CET
 xrun
 	-elaborate
 	-l xrun_elaborate.log
@@ -31,28 +31,28 @@ xrun
 			streams:   7, words:  3972
 			streams:   9, words: 25661
 			streams:   7, words:  3321
-		worklib.top:sv <0x752be72b>
-			streams:  25, words: 99908
+		worklib.top:sv <0x7e865558>
+			streams:  29, words: 105986
 	string             test_result = "PASSED";
 	                             |
-xmelab: *W,COVUTA (./alu_tb.sv,51|30): Toggle coverage is not supported for SystemVerilog integer, real, string, dynamic array, sparse memory and reference ports. It is also not supported for VHDL multi-dimensional array and array of record. There may also be other such objects in the design.
+xmelab: *W,COVUTA (./alu_tb.sv,53|30): Toggle coverage is not supported for SystemVerilog integer, real, string, dynamic array, sparse memory and reference ports. It is also not supported for VHDL multi-dimensional array and array of record. There may also be other such objects in the design.
 	Building instance specific data structures.
 	Performing constant object marking (COM) analysis.
-xmelab: *W,OBINRGT: (File: ./alu_tb.sv, Line : 98): Some of the values in bin range '[1 : 4294967294]' of bin 'top.zeros_or_ones_on_ops.a_leg.others' are not within the possible values that coverpoint can store. Range will be modified to '[1 : 2147483647]'.
-xmelab: *W,OBINRGT: (File: ./alu_tb.sv, Line : 104): Some of the values in bin range '[1 : 4294967294]' of bin 'top.zeros_or_ones_on_ops.b_leg.others' are not within the possible values that coverpoint can store. Range will be modified to '[1 : 2147483647]'.
+xmelab: *W,OBINRGT: (File: ./alu_tb.sv, Line : 100): Some of the values in bin range '[1 : 4294967294]' of bin 'top.zeros_or_ones_on_ops.a_leg.others' are not within the possible values that coverpoint can store. Range will be modified to '[1 : 2147483647]'.
+xmelab: *W,OBINRGT: (File: ./alu_tb.sv, Line : 106): Some of the values in bin range '[1 : 4294967294]' of bin 'top.zeros_or_ones_on_ops.b_leg.others' are not within the possible values that coverpoint can store. Range will be modified to '[1 : 2147483647]'.
 	Loading native compiled code:     .................... Done
 	Design hierarchy summary:
 		                 Instances  Unique
 		Modules:                 5       5
-		Registers:             128     128
+		Registers:             136     136
 		Scalar wires:            8       -
 		Vectored wires:          2       -
 		Always blocks:          13      13
-		Initial blocks:          4       4
+		Initial blocks:          6       6
 		Final blocks:            1       1
 		Pseudo assignments:      2       2
-		Assertions:              7       7
+		Assertions:              6       6
 		Covergroup Instances:    0       4
 		Simulation timescale:  1ps
 	Writing initial simulation snapshot: worklib.top:sv
-TOOL:	xrun	19.09-s003: Exiting on Nov 04, 2021 at 01:13:52 CET  (total: 00:00:00)
+TOOL:	xrun	19.09-s003: Exiting on Nov 04, 2021 at 02:16:36 CET  (total: 00:00:01)
