@@ -5,22 +5,22 @@ module top;
 // type and variable definitions
 //------------------------------------------------------------------------------
 
-	typedef enum bit[2:0] {and_op = 3'b000,
-		or_op                    = 3'b001,
-		add_op                   = 3'b100,
-		sub_op                   = 3'b101,
-		not_used0                = 3'b011,
-		not_used1                = 3'b010,
-		not_used2                = 3'b111,
-		not_used3                = 3'b110
+	typedef enum bit[2:0] {
+		and_op                      = 3'b000,
+		or_op                       = 3'b001,
+		add_op                      = 3'b100,
+		sub_op                      = 3'b101,
+		rst_op                      = 3'b110,
+		no_op                       = 3'b111
 	} operation_t;
+
 	bit         signed  [31:0]  A;
 	bit         signed  [31:0]  B;
 	bit                 [63:0]  BA;
 	bit                         clk;
 	bit                         rst_n;
 	bit                         sin;
-	logic                       sout; 
+	logic                       sout;
 	bit                 [98:0]  in;
 	logic               [54:0]  out;
 
@@ -56,6 +56,243 @@ module top;
 
 	mtm_Alu ALU (.clk(clk), .rst_n(rst_n), .sin(sin), .sout(sout));
 
+
+//------------------------------------------------------------------------------
+// Coverage block
+//------------------------------------------------------------------------------
+
+// Covergroup checking the op codes and theri sequences
+	covergroup op_cov;
+
+		option.name = "cg_op_cov";
+
+		coverpoint op_set {
+			// #A1 test all operations
+			bins A1_single_cycle[] = {[and_op : no_op]};
+
+			// #A2 test all operations after reset
+			bins A2_rst_opn[]      = (rst_op => [and_op:sub_op]);
+
+			// #A3 test reset after all operations
+			bins A3_opn_rst[]      = ([and_op:sub_op] => rst_op);
+
+			// #A6 two operations in row
+			bins A6_twoops[]       = ([and_op:sub_op] [* 2]);
+
+		// bins manymult = (mul_op [* 3:5]);
+		}
+
+	endgroup
+
+// Covergroup checking for min and max arguments of the ALU
+	covergroup zeros_or_ones_on_ops;
+
+		option.name = "cg_zeros_or_ones_on_ops";
+
+		all_ops : coverpoint op_set {
+			ignore_bins null_ops = {rst_op, no_op};
+		}
+
+		a_leg: coverpoint A {
+			bins zeros = {'h00000000};
+			bins others= {['h000000001:'hFFFFFFFE]};
+			bins ones  = {-1};
+		}
+
+		b_leg: coverpoint B {
+			bins zeros = {'h00000000};
+			bins others= {['h000000001:'hFFFFFFFE]};
+			bins ones  = {-1};
+		}
+
+		B_op_00_FF: cross a_leg, b_leg, all_ops {
+
+			// #B1 simulate all zero input for all the operations
+
+			bins B1_add_00          = binsof (all_ops) intersect {add_op} &&
+			(binsof (a_leg.zeros) || binsof (b_leg.zeros));
+
+			bins B1_and_00          = binsof (all_ops) intersect {and_op} &&
+			(binsof (a_leg.zeros) || binsof (b_leg.zeros));
+
+			bins B1_or_00          = binsof (all_ops) intersect {or_op} &&
+			(binsof (a_leg.zeros) || binsof (b_leg.zeros));
+
+			bins B1_sub_00          = binsof (all_ops) intersect {sub_op} &&
+			(binsof (a_leg.zeros) || binsof (b_leg.zeros));
+
+			// #B2 simulate all one input for all the operations
+
+			bins B2_add_FF          = binsof (all_ops) intersect {add_op} &&
+			(binsof (a_leg.ones) || binsof (b_leg.ones));
+
+			bins B2_and_FF          = binsof (all_ops) intersect {and_op} &&
+			(binsof (a_leg.ones) || binsof (b_leg.ones));
+
+			bins B2_or_FF          = binsof (all_ops) intersect {or_op} &&
+			(binsof (a_leg.ones) || binsof (b_leg.ones));
+
+			bins B2_sub_FF          = binsof (all_ops) intersect {sub_op} &&
+			(binsof (a_leg.ones) || binsof (b_leg.ones));
+
+			bins B2_sub_max         = binsof (all_ops) intersect {sub_op} &&
+			(binsof (a_leg.ones) && binsof (b_leg.ones));
+
+			// #B3 simulate all one input A and B for all the operations
+
+			bins B3_add_FF          = binsof (all_ops) intersect {add_op} &&
+			(binsof (a_leg.ones) && binsof (b_leg.ones));
+
+			bins B3_and_FF          = binsof (all_ops) intersect {and_op} &&
+			(binsof (a_leg.ones) && binsof (b_leg.ones));
+
+			bins B3_or_FF          = binsof (all_ops) intersect {or_op} &&
+			(binsof (a_leg.ones) && binsof (b_leg.ones));
+
+			bins B3_sub_FF          = binsof (all_ops) intersect {sub_op} &&
+			(binsof (a_leg.ones) && binsof (b_leg.ones));
+
+			// #B4 simulate all zero input A and B for all the operations
+
+			bins B4_add_00          = binsof (all_ops) intersect {add_op} &&
+			(binsof (a_leg.zeros) && binsof (b_leg.zeros));
+
+			bins B4_and_00         = binsof (all_ops) intersect {and_op} &&
+			(binsof (a_leg.zeros) && binsof (b_leg.zeros));
+
+			bins B4_or_00         = binsof (all_ops) intersect {or_op} &&
+			(binsof (a_leg.zeros) && binsof (b_leg.zeros));
+
+			bins B4_sub_00         = binsof (all_ops) intersect {sub_op} &&
+			(binsof (a_leg.zeros) && binsof (b_leg.zeros));
+
+
+
+
+			ignore_bins others_only =
+			binsof(a_leg.others) && binsof(b_leg.others);
+		}
+
+	endgroup
+
+//Covergoup for flags
+
+	covergroup flag_cov;
+
+		option.name = "cg_flags_cov";
+
+		all_ops : coverpoint op_set {
+			ignore_bins null_ops = {rst_op,no_op};
+		}
+
+
+		flag_leg : coverpoint flags_expected {
+			bins carry = {'b1000};
+			bins overflow = {'b0100};
+			bins zero = {'b0010};
+			bins negative = {'b0001};
+			bins rest = {'b1100, 'b1010, 'b1001, 'b0110, 'b0101};
+		}
+
+		Flags: cross flag_leg, all_ops{
+
+			// #C1 simulate carry flag
+
+			bins C1_carry_add          = binsof (all_ops) intersect {add_op} &&
+			(binsof (flag_leg.carry));
+
+			bins C1_carry_sub          = binsof (all_ops) intersect {sub_op} &&
+			(binsof (flag_leg.carry));
+
+			// #C2 simulate overflow flag
+
+			bins C2_overflow_add          = binsof (all_ops) intersect {add_op} &&
+			(binsof (flag_leg.overflow));
+
+			bins C2_overflow_sub          = binsof (all_ops) intersect {sub_op} &&
+			(binsof (flag_leg.overflow));
+
+			// #C3 simulate zero flag
+
+			bins C3_zero_add          = binsof (all_ops) intersect {add_op} &&
+			(binsof (flag_leg.zero));
+
+			bins C3_zero_sub          = binsof (all_ops) intersect {sub_op} &&
+			(binsof (flag_leg.zero));
+
+			bins C3_zero_and          = binsof (all_ops) intersect {and_op} &&
+			(binsof (flag_leg.zero));
+
+			bins C3_zero_or          = binsof (all_ops) intersect {or_op} &&
+			(binsof (flag_leg.zero));
+
+			// #C4 simulate negative flag
+
+			bins C4_negative_add          = binsof (all_ops) intersect {add_op} &&
+			(binsof (flag_leg.negative));
+
+			bins C4_negative_sub          = binsof (all_ops) intersect {sub_op} &&
+			(binsof (flag_leg.negative));
+
+			bins C4_negative_and          = binsof (all_ops) intersect {and_op} &&
+			(binsof (flag_leg.negative));
+
+			bins C4_negative_or          = binsof (all_ops) intersect {or_op} &&
+			(binsof (flag_leg.negative));
+
+
+			ignore_bins or_overflow = binsof (all_ops) intersect {or_op} &&
+			(binsof (flag_leg.overflow));
+			ignore_bins and_overflow = binsof (all_ops) intersect {and_op} &&
+			(binsof (flag_leg.overflow));
+			ignore_bins or_carry = binsof (all_ops) intersect {or_op} &&
+			(binsof (flag_leg.carry));
+			ignore_bins and_carry = binsof (all_ops) intersect {and_op} &&
+			(binsof (flag_leg.carry));
+		}
+
+	endgroup
+
+	covergroup error_cov;
+		option.name = "cg_errors";
+
+		data_leg: coverpoint package_n{
+			bins less_D1 = {7};
+			bins more_D2 = {9};
+		}
+
+		crc_leg: coverpoint crc_ok {
+			bins crc_error_D3 = {0};
+		}
+
+		ops_leg: coverpoint op_set {
+			bins error_ops_D4 = {no_op};
+		}
+
+	endgroup
+
+
+	op_cov                      oc;
+	zeros_or_ones_on_ops        c_00_FF;
+	error_cov 					ec;
+	flag_cov					fc;
+
+	initial begin : coverage
+		oc      = new();
+		c_00_FF = new();
+		ec		= new();
+		fc		= new();
+		
+		forever begin : sample_cov
+			@(posedge clk);
+			oc.sample();
+			c_00_FF.sample();
+			ec.sample();
+			fc.sample();
+		end
+	end : coverage
+
+
 //------------------------------------------------------------------------------
 // Clock generator
 //------------------------------------------------------------------------------
@@ -77,16 +314,16 @@ module top;
 
 	function operation_t get_op();
 		bit [2:0] op_choice;
-		op_choice = $random;
+		op_choice = 3'($random);
 		case (op_choice)
 			3'b000 : return and_op;
 			3'b001 : return  or_op;
 			3'b100 : return add_op;
 			3'b101 : return sub_op;
-			3'b011 : return not_used0;
-			3'b010 : return not_used1;
-			3'b111 : return not_used2;
-			3'b110 : return not_used3;
+			3'b011 : return rst_op;
+			3'b010 : return no_op;
+			3'b111 : return no_op;
+			3'b110 : return no_op;
 		endcase // case (op_choice)
 	endfunction : get_op
 
@@ -107,9 +344,7 @@ module top;
 
 	initial begin : tester
 		reset_alu();
-		@(negedge clk);
-		sin =1'b1;
-		repeat (5) begin : tester_main
+		repeat (1000) begin : tester_main
 			@(negedge clk);
 			op_set = get_op();
 			A      = get_data();
@@ -117,8 +352,8 @@ module top;
 
 			random_num = $urandom%10;
 			case (random_num)
-				1: package_n = 5;
-				9:  package_n = 6;
+				1: package_n = 8;
+				9:  package_n = 7;
 				default:  package_n = 9;
 			endcase
 
@@ -139,109 +374,123 @@ module top;
 					CRC = 4'($random);//$random%5+4;
 					crc_ok = 'b0;
 				end
-
 			endcase
 
 
-			for (int i=0; i<package_n; i++) begin
-				in[98-(11*i)-:11]= {2'b00, BA[63-(8*i)-:8], 1'b1};
-			end
-			in[10:0] = {3'b010, op_set, CRC, 1'b1};
-
-			//for (int i=98; i<=99-package_n*11; i--) begin
-//			for (int i=98; i>=0; i--) begin
-//				@(negedge clk);
-//				sin=in[i];
-//			end
-			package_n =8;
-			for (int i=0; i<11*package_n; i++) begin
-				@(negedge clk);
-				
-				sin=in[98-i];
-				$display("i = %0d", i);
-			end
-			$display("for end");
-			@(negedge sout);
-
-			for (int i=0; i<55; i++) begin
-				@(negedge clk);
-				out[54-i]= sout;
-			end
-
-			@(negedge clk);
-
-			if (out[54:53] == 'b00) begin //correct
-
-				for (int i=0; i<4; i++) begin
-					result[31-(8*i)-:8] = out [52-(11*i)-:8];
+			case(op_set==rst_op)
+				1: begin
+					reset_alu();
 				end
-				flags = out[7:4];
-				crc_out = out[3:1];
+				0:begin
 
-				begin
-					expected = get_expected( B,A, op_set);
-					assert(result === expected)
-					else begin
-						$display("Test FAILED for A=%0d B=%0d op_set=%0d", A, B, op_set);
-						$display("Expected: %d  received: %d", expected, result);
-						test_result = "FAILED";
+					for (int i=0; i<package_n; i++) begin
+						in[98-(11*i)-:11]= {2'b00, BA[63-(8*i)-:8], 1'b1};
+					end
+					in[10:0] = {3'b010, op_set, CRC, 1'b1};
+
+					//for (int i=98; i<=99-package_n*11; i--) begin
+//          for (int i=98; i>=0; i--) begin
+//              @(negedge clk);
+//              sin=in[i];
+//          end
+					for (int i=0; i<11*(package_n-1); i++) begin
+						@(negedge clk);
+
+						sin=in[98-i];
+					end
+					for (int i=0; i<11; i++) begin
+						@(negedge clk);
+
+						sin=in[10-i];
 					end
 
-
-
-					flags_expected = get_flags( B,A, op_set);
-					assert(flags === flags_expected)
-					else begin
-						$display("Test FAILED for A=%0d B=%0d op_set=%0d", A, B, op_set);
-						$display("Flags expected: %d  received: %d", flags_expected, flags);
-						test_result = "FAILED";
+					@(negedge sout);
+					for (int i=0; i<11; i++) begin
+						@(negedge clk);
+						out[54-i]= sout;
 					end
-
-
-					crc_expected = CalculateCRC_3( {expected, 1'b0, flags_expected});
-					assert(crc_out === crc_expected)
-					else begin
-						$display("Test FAILED for A=%0d B=%0d op_set=%0d", B, A, op_set);
-						$display("CRC expected: %d  received: %d", crc_expected, crc_out);
-						test_result = "FAILED";
+					if (out[54:53] == 'b00) begin
+						for (int i=11; i<55; i++) begin
+							@(negedge clk);
+							out[54-i]= sout;
+						end
 					end
+					@(negedge clk);
 
+					if (out[54:53] == 'b00) begin //correct
+
+						for (int i=0; i<4; i++) begin
+							result[31-(8*i)-:8] = out [52-(11*i)-:8];
+						end
+						flags = out[7:4];
+						crc_out = out[3:1];
+
+						begin
+							expected = get_expected( B,A, op_set);
+							assert(result === expected)
+							else begin
+								$display("Test FAILED for A=%0d B=%0d op_set=%0d", A, B, op_set);
+								$display("Expected: %d  received: %d", expected, result);
+								test_result = "FAILED";
+							end
+
+
+
+							flags_expected = get_flags( B,A, op_set);
+							assert(flags === flags_expected)
+							else begin
+								$display("Test FAILED for A=%0d B=%0d op_set=%0d", A, B, op_set);
+								$display("Flags expected: %d  received: %d", flags_expected, flags);
+								test_result = "FAILED";
+							end
+
+
+							crc_expected = CalculateCRC_3( {expected, 1'b0, flags_expected});
+							assert(crc_out === crc_expected)
+							else begin
+								$display("Test FAILED for A=%0d B=%0d op_set=%0d", B, A, op_set);
+								$display("CRC expected: %d  received: %d", crc_expected, crc_out);
+								test_result = "FAILED";
+							end
+
+
+						end
+					end
+					else begin //error
+
+
+						error = out[51:46];
+
+						error_expected = get_error(crc_ok, package_n, op_set);
+						if          (error[0])
+							assert(error_expected[0] === error[0])
+							else    begin
+								$display("Test FAILED for A=%0d B=%0d op_set=%3b", B, A, op_set);
+								$display("Error expected: %6b  received: %6b", error_expected, error);
+								test_result = "FAILED";
+							end
+						else if     (error[1])
+							assert(error_expected[1] === error[1])
+							else    begin
+								$display("Test FAILED for A=%0d B=%0d op_set=%3b", B, A, op_set);
+								$display("Error expected: %6b  received: %6b", error_expected, error);
+								test_result = "FAILED";
+							end
+						else if     (error[2])
+							assert(error_expected[2] === error[2])
+							else begin
+								$display("Test FAILED for A=%0d B=%0d op_set=%3b", B, A, op_set);
+								$display("Error expected: %6b  received: %6b", error_expected, error);
+								test_result = "FAILED";
+							end
+						else test_result = "FAILED";
+
+
+					end
 
 				end
-			end
-			else begin //error
-
-
-				error = out[51:46];
-
-				error_expected = get_error(crc_ok, package_n, op_set);
-				if          (error[0])
-					assert(error_expected[0] === error[0])
-					else    begin
-						$display("Test FAILED for A=%0d B=%0d op_set=%3b", B, A, op_set);
-						$display("Error expected: %6b  received: %6b", error_expected, error);
-						test_result = "FAILED";
-					end
-				else if     (error[1])
-					assert(error_expected[1] === error[1])
-					else    begin
-						$display("Test FAILED for A=%0d B=%0d op_set=%3b", B, A, op_set);
-						$display("Error expected: %6b  received: %6b", error_expected, error);
-						test_result = "FAILED";
-					end
-				else if     (error[2])
-					assert(error_expected[2] === error[2])
-					else begin
-						$display("Test FAILED for A=%0d B=%0d op_set=%3b", B, A, op_set);
-						$display("Error expected: %6b  received: %6b", error_expected, error);
-						test_result = "FAILED";
-					end
-				else test_result = "FAILED";
-
-
-			end
-
-
+			endcase
+			if($get_coverage() == 100) break;
 		end
 		$display("Passed");
 		$finish;
@@ -254,12 +503,33 @@ module top;
 	`ifdef DEBUG
 		$display("%0t DEBUG: reset_alu", $time);
 	`endif
-		//start   = 1'b0;
 		rst_n = 1'b0;
 		sin =1'b1;
 		@(negedge clk);
 		rst_n = 1'b1;
 	endtask
+
+//------------------------------------------------------------------------------
+// scoreboard
+//------------------------------------------------------------------------------
+
+
+	always @(negedge clk) begin : scoreboard
+		shortint predicted_result;
+
+		predicted_result = get_expected(A, B, op_set);
+
+		CHK_RESULT: assert(result === predicted_result) begin
+		   `ifdef DEBUG
+			$display("%0t Test passed for A=%0d B=%0d op_set=%0d", $time, A, B, op);
+		   `endif
+		end
+		else begin
+			$warning("%0t Test FAILED for A=%0d B=%0d op_set=%0d\nExpected: %d  received: %d",
+				$time, A, B, op_set , predicted_result, result);
+		end;
+
+	end : scoreboard
 
 //------------------------------------------------------------------------------
 // get error
@@ -272,19 +542,19 @@ module top;
 		bit [5:0] error;
 		bit signed [31:0] c;
 		begin
-			if (package_n != 8) begin
-				error[1] = '1;
-				error[4] = '1;
-			end
-
-			if (op_set == not_used0 || op_set == not_used1 || op_set == not_used2 || op_set == not_used3) begin
+			if (package_n != 9) begin
 				error[2] = '1;
 				error[5] = '1;
 			end
 
-			if (!crc_ok) begin
+			if (op_set == no_op ) begin
 				error[0] = '1;
 				error[3] = '1;
+			end
+
+			if (!crc_ok) begin
+				error[1] = '1;
+				error[4] = '1;
 			end
 
 

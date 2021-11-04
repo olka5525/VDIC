@@ -1,0 +1,38 @@
+TOOL:	xrun	19.09-s003: Started on Nov 03, 2021 at 23:06:18 CET
+xrun
+	-F tb.f
+		-F ./dut.f
+			./mtm_Alu.vp
+		alu_tb.sv
+	-v93
+	+nowarnDSEM2009
+	+nowarnDSEMEL
+	+nowarnCGDEFN
+	-xmlibdirname INCA_libs_gui
+	+access+r
+	+gui
+	+overwrite
+	-nocopyright
+	-l xrun_gui.log
+xmsim: *W,XCLGNOPTM: The SystemVerilog constraint solver Xceligen options 'seed_only_rand and process_alternate_rng and ignore_worklib_name' are not specified and will default to 0. The recommended value for each of them is 1 which will become the default in a future release.
+SVSEED default: 1
+xmsim: *W,RNDXCELON: Xceligen, the new SystemVerilog constraint solver is used. Disabling Xceligen and using the legacy constraint solver is possible with "xrun/xmsim -xceligen on=0 ...".
+
+-------------------------------------
+Relinquished control to SimVision...
+xcelium> 
+xcelium> source /cad/XCELIUM1909/tools/xcelium/files/xmsimrc
+xcelium> database -open waves -into waves.shm -default
+Created default SHM database waves
+xcelium> probe -create -shm top.A top.B top.BA top.CRC top.clk top.crc_expected top.crc_ok top.crc_out top.error top.error_expected top.expected top.flags top.flags_expected top.in top.op_set top.out top.package_n top.random_crc top.random_num top.result top.rst_n top.sin top.sout top.test_result
+Created probe 1
+xcelium> run
+Passed
+Test PASSED.
+Simulation complete via $finish(1) at time 1312860 NS + 0
+./alu_tb.sv:254 		$finish;
+xcelium> ^C
+xcelium> exit
+...Regained control from SimVision
+-------------------------------------
+TOOL:	xrun	19.09-s003: Exiting on Nov 04, 2021 at 00:32:51 CET  (total: 01:26:33)
