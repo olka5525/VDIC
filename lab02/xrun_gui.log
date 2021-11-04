@@ -1,4 +1,4 @@
-TOOL:	xrun	19.09-s003: Started on Nov 04, 2021 at 02:36:08 CET
+TOOL:	xrun	19.09-s003: Started on Nov 04, 2021 at 12:49:00 CET
 xrun
 	-F tb.f
 		-F ./dut.f
@@ -16,8 +16,8 @@ xrun
 	-l xrun_gui.log
 	-s
 Recompiling... reason: file './alu_tb.sv' is newer than expected.
-	expected: Thu Nov  4 02:26:03 2021
-	actual:   Thu Nov  4 02:36:02 2021
+	expected: Thu Nov  4 12:48:18 2021
+	actual:   Thu Nov  4 12:48:46 2021
 file: ./alu_tb.sv
 	module worklib.top:sv
 		errors: 0, warnings: 0
@@ -27,8 +27,8 @@ file: ./alu_tb.sv
 		top
 	Building instance overlay tables: .................... Done
 	Generating native compiled code:
-		worklib.top:sv <0x44d297f1>
-			streams:  27, words: 57633
+		worklib.top:sv <0x6bc27022>
+			streams:  27, words: 58088
 	Building instance specific data structures.
 xmelab: *W,OBINRGT: (File: ./alu_tb.sv, Line : 100): Some of the values in bin range '[1 : 4294967294]' of bin 'top.zeros_or_ones_on_ops.a_leg.others' are not within the possible values that coverpoint can store. Range will be modified to '[1 : 2147483647]'.
 xmelab: *W,OBINRGT: (File: ./alu_tb.sv, Line : 106): Some of the values in bin range '[1 : 4294967294]' of bin 'top.zeros_or_ones_on_ops.b_leg.others' are not within the possible values that coverpoint can store. Range will be modified to '[1 : 2147483647]'.
@@ -59,16 +59,10 @@ Relinquished control to SimVision...
 xcelium> input -quiet .reinvoke.sim
 xcelium> file delete .reinvoke.sim
 xcelium> run
-xmsim: *E,ASRTST (./alu_tb.sv,557): (time 3400 NS) Assertion top.scoreboard.verify_result.CHK_RESULT has failed 
-3400 NS + 0 (Assertion output stop: top.scoreboard.verify_result.CHK_RESULT = failed)
-Test FAILED for A=-1295874971 B=15983361 op_set=5
-Expected: 1311858332  received:           0
-xmsim: *E,ASRTST (./alu_tb.sv,567): (time 3400 NS) Assertion top.scoreboard.verify_result.CHK_FLAG has failed 
-3400 NS + 0 (Assertion output stop: top.scoreboard.verify_result.CHK_FLAG = failed)
-Test FAILED for A=-1295874971 B=15983361 op_set=5
-Flags expected:  8  received:  9
-xmsim: *E,ASRTST (./alu_tb.sv,576): (time 3400 NS) Assertion top.scoreboard.verify_result.CHK_CRC has failed 
-3400 NS + 0 (Assertion output stop: top.scoreboard.verify_result.CHK_CRC = failed)
-Test FAILED for A=15983361 B=-1295874971 op_set=5
-CRC expected: 0  received: 1
-xcelium> 
+Passed
+Test PASSED.
+Simulation complete via $finish(1) at time 2374140 NS + 0
+./alu_tb.sv:519 		$finish;
+xcelium> ^C
+xcelium> exit
+TOOL:	xrun	19.09-s003: Exiting on Nov 04, 2021 at 12:49:12 CET  (total: 00:00:12)

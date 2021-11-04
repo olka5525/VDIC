@@ -46,20 +46,6 @@ mmap new  -reuse -name {Example Map} -radix %x -contents {{%b=11???? -bgcolor or
 {%x=* -label %x -linecolor gray -shape bus}}
 
 #
-# Design Browser windows
-#
-if {[catch {window new WatchList -name "Design Browser 1" -geometry 730x500+261+33}] != ""} {
-    window geometry "Design Browser 1" 730x500+261+33
-}
-window target "Design Browser 1" on
-browser using {Design Browser 1}
-browser set -scope  simulator::top 
-browser set \
-    -signalsort name
-browser yview see  simulator::top 
-browser timecontrol set -lock 0
-
-#
 # Waveform windows
 #
 if {[catch {window new WaveWindow -name "Waveform 1" -geometry 1920x923+0+31}] != ""} {
@@ -158,7 +144,7 @@ set id [waveform add -signals  {
 	simulator::top.test_result
 	} ]
 
-waveform xview limits 0 3360000ps
+waveform xview limits 0 3400000ps
 
 #
 # Waveform Window Links

@@ -2,14 +2,14 @@
 *I,MERGL1: Merging Simulation Coverage ...
 ----------------------------
 *I,MERGL1: Preparing target model ...
-*I,MERGL1: Reading model of primary run (cov_work/scope/lab01) as initial model: cov_work/scope/icc_400e655d_7f5b3f30.ucm
+*I,MERGL1: Reading model of primary run (cov_work/scope/lab01) as initial model: cov_work/scope/icc_195114a2_7835a614.ucm
 *I,MERGL1: Target model generated successfully.
 *I,MERGL1: Projecting Simulation ucd data into the target model ...
 *I,MERGL2:   cov_work/scope/lab01:
 *I,MERGL3:       Data is projected in to the target model.
 *I,MERGL1: Writing output database cov_work/scope/merged_results:
-*I,MERGL2:   Model: cov_work/scope/merged_results/icc_400e655d_7f5b3f30.ucm
-*I,MERGL2:   Data : cov_work/scope/merged_results/icc_400e655d_7f5b3f30.ucd
+*I,MERGL2:   Model: cov_work/scope/merged_results/icc_195114a2_7835a614.ucm
+*I,MERGL2:   Data : cov_work/scope/merged_results/icc_195114a2_7835a614.ucd
 *I,MERGL1: No Specman coverage databases found in the runs.
 Total conflicts during target model creation: 0
 Total items not merged                      : 0
@@ -19,5 +19,5 @@ Total runs not merged                                 : 0
 *W,REPDEP: This is a legacy report and no future enhancement is planned for this report. It is recommended that you use the 'report_metrics' command and generate a dynamic report.
 name                                     Overall Average      Overall Covered      Code Average         Code Covered         Fsm Average          Fsm Covered          Functional Average   Functional Covered   
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-top                                      14.86%               7.67% (89/1160/2)    14.25%               6.84% (73/1068/2)    n/a                  n/a                  15.47%               17.39% (16/92)       
-|--ALU                                   46.43%               46.43% (26/56)       46.43%               46.43% (26/56)       n/a                  n/a                  n/a                  n/a                  
+top                                      96.18%               92.83% (1036/1116)   92.36%               92.19% (944/1024)    n/a                  n/a                  100.00%              100.00% (92/92)      
+|--ALU                                   98.21%               98.21% (55/56)       98.21%               98.21% (55/56)       n/a                  n/a                  n/a                  n/a                  

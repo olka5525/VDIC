@@ -24,21 +24,14 @@ module top;
 	bit                 [98:0]  in;
 	logic               [54:0]  out;
 
-	bit                 [31:0]  expected;
-	bit                 [3:0]   flags_expected;
-	bit                 [2:0]   crc_expected;
 	bit         signed  [31:0]  result;
-
-	bit                 [4:0]   package_n;
-
+	bit                 [3:0]   package_n;
 	bit                 [3:0]   flags;
 	bit                 [2:0]   crc_out;
 	bit                 [3:0]   CRC;
 
 	bit                         crc_ok;
 	bit                 [5:0]   error;
-	bit                 [5:0]   error_expected;
-
 	bit                         done='0;
 	bit                         correct='0;
 	bit                 [9:0]   random_crc;
@@ -79,7 +72,7 @@ module top;
 			bins A3_opn_rst[]      = ([and_op:sub_op] => rst_op);
 
 			// #A6 two operations in row
-			bins A6_twoops[]       = ([and_op:sub_op] [* 2]);
+			bins A4_twoops[]       = ([and_op:sub_op] [* 2]);
 
 		// bins manymult = (mul_op [* 3:5]);
 		}
@@ -188,7 +181,7 @@ module top;
 		}
 
 
-		flag_leg : coverpoint flags_expected {
+		flag_leg : coverpoint flags {
 			bins carry = {'b1000};
 			bins overflow = {'b0100};
 			bins zero = {'b0010};
@@ -259,16 +252,16 @@ module top;
 		option.name = "cg_errors";
 
 		data_leg: coverpoint package_n{
-			bins less_D1 = {7};
-			bins more_D2 = {9};
+			bins D1_error_less = {7};
+			bins D1_error more = {9};
 		}
 
 		crc_leg: coverpoint crc_ok {
-			bins crc_error_D3 = {0};
+			bins D2_crc_error = {0};
 		}
 
-		ops_leg: coverpoint op_set {
-			bins error_ops_D4 = {no_op};
+		ops_leg: coverpoint op_set { 
+			bins D3_error_ops = {no_op};
 		}
 
 	endgroup
@@ -346,7 +339,7 @@ module top;
 
 	initial begin : tester
 		reset_alu();
-		repeat (5) begin : tester_main
+		repeat (1000) begin : tester_main
 			@(negedge clk);
 			op_set = get_op();
 			A      = get_data();
@@ -369,11 +362,11 @@ module top;
 
 			case (random_crc)
 				1: begin
-					CRC = 4'($random);//8;
+					CRC = 4'($random);
 					crc_ok = 'b0;
 				end
 				9: begin
-					CRC = 4'($random);//$random%5+4;
+					CRC = 4'($random);
 					crc_ok = 'b0;
 				end
 			endcase
@@ -384,17 +377,12 @@ module top;
 					reset_alu();
 				end
 				0:begin
-
+					
 					for (int i=0; i<package_n; i++) begin
 						in[98-(11*i)-:11]= {2'b00, BA[63-(8*i)-:8], 1'b1};
 					end
 					in[10:0] = {3'b010, op_set, CRC, 1'b1};
 
-					//for (int i=98; i<=99-package_n*11; i--) begin
-//          for (int i=98; i>=0; i--) begin
-//              @(negedge clk);
-//              sin=in[i];
-//          end
 					for (int i=0; i<11*(package_n-1); i++) begin
 						@(negedge clk);
 
@@ -430,83 +418,7 @@ module top;
 						error = out[51:46];
 						correct = '0;
 					end
-
-					@(negedge clk);
-					@(negedge clk);
-
 					done ='1;
-
-				//@(negedge clk);
-
-//                  if (out[54:53] == 'b00) begin //correct
-//
-//                      for (int i=0; i<4; i++) begin
-//                          result[31-(8*i)-:8] = out [52-(11*i)-:8];
-//                      end
-//                      flags = out[7:4];
-//                      crc_out = out[3:1];
-//
-//                      begin
-//                          expected = get_expected( B,A, op_set);
-//                          assert(result === expected)
-//                          else begin
-//                              $display("Test FAILED for A=%0d B=%0d op_set=%0d", A, B, op_set);
-//                              $display("Expected: %d  received: %d", expected, result);
-//                              test_result = "FAILED";
-//                          end
-//
-//
-//
-//                          flags_expected = get_flags( B,A, op_set);
-//                          assert(flags === flags_expected)
-//                          else begin
-//                              $display("Test FAILED for A=%0d B=%0d op_set=%0d", A, B, op_set);
-//                              $display("Flags expected: %d  received: %d", flags_expected, flags);
-//                              test_result = "FAILED";
-//                          end
-//
-//
-//                          crc_expected = CalculateCRC_3( {expected, 1'b0, flags_expected});
-//                          assert(crc_out === crc_expected)
-//                          else begin
-//                              $display("Test FAILED for A=%0d B=%0d op_set=%0d", B, A, op_set);
-//                              $display("CRC expected: %d  received: %d", crc_expected, crc_out);
-//                              test_result = "FAILED";
-//                          end
-//
-//
-//                      end
-//                  end
-//                  else begin //error
-//
-//
-//                      error = out[51:46];
-//
-//                      error_expected = get_error(crc_ok, package_n, op_set);
-//                      if          (error[0])
-//                          assert(error_expected[0] === error[0])
-//                          else    begin
-//                              $display("Test FAILED for A=%0d B=%0d op_set=%3b", B, A, op_set);
-//                              $display("Error expected: %6b  received: %6b", error_expected, error);
-//                              test_result = "FAILED";
-//                          end
-//                      else if     (error[1])
-//                          assert(error_expected[1] === error[1])
-//                          else    begin
-//                              $display("Test FAILED for A=%0d B=%0d op_set=%3b", B, A, op_set);
-//                              $display("Error expected: %6b  received: %6b", error_expected, error);
-//                              test_result = "FAILED";
-//                          end
-//                      else if     (error[2])
-//                          assert(error_expected[2] === error[2])
-//                          else begin
-//                              $display("Test FAILED for A=%0d B=%0d op_set=%3b", B, A, op_set);
-//                              $display("Error expected: %6b  received: %6b", error_expected, error);
-//                              test_result = "FAILED";
-//                          end
-//                      else test_result = "FAILED";
-//
-//
 				end
 
 
@@ -533,23 +445,16 @@ module top;
 //------------------------------------------------------------------------------
 // scoreboard
 //------------------------------------------------------------------------------
-
-
 	always @(negedge clk) begin : scoreboard
 		if(done) begin:verify_result
 			bit                 [31:0]  expected;
 			bit                 [3:0]   flags_expected;
 			bit                 [2:0]   crc_expected;
-			//bit         signed  [31:0]  result;
-			//bit                 [3:0]   flags;
-			//bit                 [2:0]   crc_out;
-			//bit                 [3:0]   CRC;
 
-			//bit                         crc_ok;
-			//bit                 [5:0]   error;
 			bit                 [5:0]   error_expected;
 			automatic  string           test_result = "PASSED";
 
+			done <= '0;
 			if (correct) begin
 
 				begin
@@ -561,8 +466,6 @@ module top;
 						test_result = "FAILED";
 					end
 
-
-
 					flags_expected = get_flags( B,A, op_set);
 					CHK_FLAG: assert(flags === flags_expected)
 					else begin
@@ -571,7 +474,6 @@ module top;
 						test_result = "FAILED";
 					end
 
-
 					crc_expected = CalculateCRC_3( {expected, 1'b0, flags_expected});
 					CHK_CRC:  assert(crc_out === crc_expected)
 					else begin
@@ -579,12 +481,10 @@ module top;
 						$display("CRC expected: %d  received: %d", crc_expected, crc_out);
 						test_result = "FAILED";
 					end
-
-
 				end
 			end
-			else begin //error
 
+			else begin //error
 				error_expected = get_error(crc_ok, package_n, op_set);
 				if          (error[0])
 					CHK_ERROR_OP:  assert(error_expected[0] === error[0])
@@ -593,6 +493,7 @@ module top;
 						$display("Error expected: %6b  received: %6b", error_expected, error);
 						test_result = "FAILED";
 					end
+
 				else if     (error[1])
 					CHK_ERROR_CRC: assert(error_expected[1] === error[1])
 					else    begin
@@ -600,6 +501,7 @@ module top;
 						$display("Error expected: %6b  received: %6b", error_expected, error);
 						test_result = "FAILED";
 					end
+
 				else if     (error[2])
 					CHK_ERROR_DATA: assert(error_expected[2] === error[2])
 					else begin
@@ -608,7 +510,6 @@ module top;
 						test_result = "FAILED";
 					end
 				else test_result = "FAILED";
-
 			end
 		end
 	end : scoreboard

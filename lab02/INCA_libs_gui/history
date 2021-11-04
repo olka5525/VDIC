@@ -2,10 +2,8 @@
 // File created by:  xrun
 // Do not modify this file
 
-s1::(04Nov2021:02:01:11):( xrun -compile -l xrun_compile.log -F tb.f -v93 +nowarnDSEM2009 +nowarnDSEMEL +nowarnCGDEFN -xmlibdirname INCA_libs_gui +access+r +gui +overwrite -nocopyright )
-s2::(04Nov2021:02:01:11):( xrun -elaborate -l xrun_elaborate.log -F tb.f -v93 +nowarnDSEM2009 +nowarnDSEMEL +nowarnCGDEFN -xmlibdirname INCA_libs_gui +access+r +gui +overwrite -nocopyright )
-s3::(04Nov2021:02:01:11):( xrun -F tb.f -v93 +nowarnDSEM2009 +nowarnDSEMEL +nowarnCGDEFN -xmlibdirname INCA_libs_gui +access+r +gui +overwrite -nocopyright -l xrun_gui.log )
-s4::(04Nov2021:02:18:39):( xrun -F tb.f -v93 +nowarnDSEM2009 +nowarnDSEMEL +nowarnCGDEFN -xmlibdirname INCA_libs_gui +access+r +gui +overwrite -nocopyright -l xrun_gui.log "-s " )
-s5::(04Nov2021:02:21:15):( xrun -F tb.f -v93 +nowarnDSEM2009 +nowarnDSEMEL +nowarnCGDEFN -xmlibdirname INCA_libs_gui +access+r +gui +overwrite -nocopyright -l xrun_gui.log -s )
-s6::(04Nov2021:02:26:09):( xrun -F tb.f -v93 +nowarnDSEM2009 +nowarnDSEMEL +nowarnCGDEFN -xmlibdirname INCA_libs_gui +access+r +gui +overwrite -nocopyright -l xrun_gui.log -s )
-s7::(04Nov2021:02:36:08):( xrun -F tb.f -v93 +nowarnDSEM2009 +nowarnDSEMEL +nowarnCGDEFN -xmlibdirname INCA_libs_gui +access+r +gui +overwrite -nocopyright -l xrun_gui.log -s )
+s1::(04Nov2021:12:45:25):( xrun -compile -l xrun_compile.log -F tb.f -v93 +nowarnDSEM2009 +nowarnDSEMEL +nowarnCGDEFN -xmlibdirname INCA_libs_gui +access+r +gui +overwrite -nocopyright )
+s2::(04Nov2021:12:45:26):( xrun -elaborate -l xrun_elaborate.log -F tb.f -v93 +nowarnDSEM2009 +nowarnDSEMEL +nowarnCGDEFN -xmlibdirname INCA_libs_gui +access+r +gui +overwrite -nocopyright )
+s3::(04Nov2021:12:45:26):( xrun -F tb.f -v93 +nowarnDSEM2009 +nowarnDSEMEL +nowarnCGDEFN -xmlibdirname INCA_libs_gui +access+r +gui +overwrite -nocopyright -l xrun_gui.log )
+s4::(04Nov2021:12:48:27):( xrun -F tb.f -v93 +nowarnDSEM2009 +nowarnDSEMEL +nowarnCGDEFN -xmlibdirname INCA_libs_gui +access+r +gui +overwrite -nocopyright -l xrun_gui.log "-s " )
+s5::(04Nov2021:12:49:00):( xrun -F tb.f -v93 +nowarnDSEM2009 +nowarnDSEMEL +nowarnCGDEFN -xmlibdirname INCA_libs_gui +access+r +gui +overwrite -nocopyright -l xrun_gui.log -s )
