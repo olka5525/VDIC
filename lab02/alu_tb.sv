@@ -253,7 +253,7 @@ module top;
 
 		data_leg: coverpoint package_n{
 			bins D1_error_less = {7};
-			bins D1_error more = {9};
+			bins D1_error_more = {9};
 		}
 
 		crc_leg: coverpoint crc_ok {

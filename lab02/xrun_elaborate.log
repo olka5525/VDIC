@@ -1,4 +1,4 @@
-TOOL:	xrun	19.09-s003: Started on Nov 04, 2021 at 14:39:15 CET
+TOOL:	xrun	19.09-s003: Started on Nov 17, 2021 at 19:32:36 CET
 xrun
 	-elaborate
 	-l xrun_elaborate.log
@@ -55,4 +55,4 @@ xmelab: *W,OBINRGT: (File: ./alu_tb.sv, Line : 99): Some of the values in bin ra
 		Covergroup Instances:    0       4
 		Simulation timescale:  1ps
 	Writing initial simulation snapshot: worklib.top:sv
-TOOL:	xrun	19.09-s003: Exiting on Nov 04, 2021 at 14:39:15 CET  (total: 00:00:00)
+TOOL:	xrun	19.09-s003: Exiting on Nov 17, 2021 at 19:32:36 CET  (total: 00:00:00)

@@ -1,0 +1,15 @@
+*.log
+*.history
+INCA_libs*
+
+.metadata
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+.recommenders

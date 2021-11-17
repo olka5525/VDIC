@@ -1,2 +1,2 @@
-1635426452 /home/student/aszydlowska/VDIC/lab02/mtm_Alu.vp
-1636033129 /home/student/aszydlowska/VDIC/lab02/alu_tb.sv
+1637173609 /home/student/aszydlowska/Pulpit/test_vdis/VDIC/lab02/mtm_Alu.vp
+1637173947 /home/student/aszydlowska/Pulpit/test_vdis/VDIC/lab02/alu_tb.sv
