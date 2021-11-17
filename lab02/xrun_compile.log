@@ -1,4 +1,4 @@
-TOOL:	xrun	19.09-s003: Started on Nov 04, 2021 at 14:39:15 CET
+TOOL:	xrun	19.09-s003: Started on Nov 10, 2021 at 18:33:29 CET
 xrun
 	-compile
 	-l xrun_compile.log
@@ -23,6 +23,10 @@ file: ././mtm_Alu.vp
 		errors: 0, warnings: 0
 		errors: 0, warnings: 0
 file: ./alu_tb.sv
+			bins D1_error more = {9};
+			                 |
+xmvlog: *E,ECBEEQ (./alu_tb.sv,256|20): Equalto ('=') symbol after bin identifier is not specified.
 	module worklib.top:sv
-		errors: 0, warnings: 0
-TOOL:	xrun	19.09-s003: Exiting on Nov 04, 2021 at 14:39:15 CET  (total: 00:00:00)
+		errors: 1, warnings: 0
+xrun: *E,VLGERR: An error occurred during parsing.  Review the log file for errors with the code *E and fix those identified problems to proceed.  Exiting with code (status 1).
+TOOL:	xrun	19.09-s003: Exiting on Nov 10, 2021 at 18:33:30 CET  (total: 00:00:01)

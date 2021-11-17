@@ -1,0 +1,24 @@
+//
+// File created by:  xrun
+// Do not modify this file
+//
+-XLMODE
+./xcelium.d/run.lnx86.19.09.d
+-RUNMODE
+-sv
+lab03/./mtm_Alu.vp
+lab03/alu_pkg.sv
+lab03/alu_bfm.sv
+lab03/tester.sv
+lab03/coverage.sv
+lab03/scoreboard.sv
+lab03/top.sv
+-CDSLIB
+./xcelium.d/run.lnx86.19.09.d/cdsrun.lib
+-HDLVAR
+./xcelium.d/run.lnx86.19.09.d/hdlrun.var
+-MESSAGES
+-UPDATE
+-XLLIBSTORE
+./xcelium.d/run.lnx86.19.09.d/xllibs
+-ALLOWUNBOUND

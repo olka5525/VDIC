@@ -1,4 +1,0 @@
-IMC(64): 19.09-s002: (c) Copyright 1995-2019 Cadence Design Systems Inc - Simulator version: 19.09-s003 - Coverage engine version: 19.09-s003
-imc: *I,RUNLD: Successfully loaded run cov_work/scope/merged_results.
-Starting gui mode
-Adding recursive exclude to toggle-bit 'top/ALU/pout_core/7'

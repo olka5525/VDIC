@@ -20,7 +20,7 @@ module top;
 	bit                         clk;
 	bit                         rst_n;
 	bit                         sin;
-	logic                       sout; 
+	logic                       sout;
 	bit                 [98:0]  in;
 	logic               [54:0]  out;
 
@@ -109,7 +109,7 @@ module top;
 		reset_alu();
 		@(negedge clk);
 		sin =1'b1;
-		repeat (5) begin : tester_main
+		repeat (500) begin : tester_main
 			@(negedge clk);
 			op_set = get_op();
 			A      = get_data();
@@ -117,8 +117,8 @@ module top;
 
 			random_num = $urandom%10;
 			case (random_num)
-				1: package_n = 5;
-				9:  package_n = 6;
+				1: package_n = 8;
+				9:  package_n = 7;
 				default:  package_n = 9;
 			endcase
 
@@ -149,25 +149,32 @@ module top;
 			in[10:0] = {3'b010, op_set, CRC, 1'b1};
 
 			//for (int i=98; i<=99-package_n*11; i--) begin
-//			for (int i=98; i>=0; i--) begin
-//				@(negedge clk);
-//				sin=in[i];
-//			end
-			package_n =8;
-			for (int i=0; i<11*package_n; i++) begin
+//          for (int i=98; i>=0; i--) begin
+//              @(negedge clk);
+//              sin=in[i];
+//          end
+			for (int i=0; i<11*(package_n-1); i++) begin
 				@(negedge clk);
-				
-				sin=in[98-i];
-				$display("i = %0d", i);
-			end
-			$display("for end");
-			@(negedge sout);
 
-			for (int i=0; i<55; i++) begin
+				sin=in[98-i];
+			end
+			for (int i=0; i<11; i++) begin
+				@(negedge clk);
+
+				sin=in[10-i];
+			end
+
+			@(negedge sout);
+			for (int i=0; i<11; i++) begin
 				@(negedge clk);
 				out[54-i]= sout;
 			end
-
+			if (out[54:53] == 'b00) begin
+				for (int i=11; i<55; i++) begin
+					@(negedge clk);
+					out[54-i]= sout;
+				end
+			end
 			@(negedge clk);
 
 			if (out[54:53] == 'b00) begin //correct
@@ -272,19 +279,19 @@ module top;
 		bit [5:0] error;
 		bit signed [31:0] c;
 		begin
-			if (package_n != 8) begin
-				error[1] = '1;
-				error[4] = '1;
-			end
-
-			if (op_set == not_used0 || op_set == not_used1 || op_set == not_used2 || op_set == not_used3) begin
+			if (package_n != 9) begin
 				error[2] = '1;
 				error[5] = '1;
 			end
 
-			if (!crc_ok) begin
+			if (op_set == not_used0 || op_set == not_used1 || op_set == not_used2 || op_set == not_used3) begin
 				error[0] = '1;
 				error[3] = '1;
+			end
+
+			if (!crc_ok) begin
+				error[1] = '1;
+				error[4] = '1;
 			end
 
 

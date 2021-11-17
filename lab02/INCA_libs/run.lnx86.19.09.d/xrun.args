@@ -2,9 +2,9 @@
 // File created by:  xrun
 // Do not modify this file
 //
--elaborate
+-compile
 -l
-xrun_elaborate.log
+xrun_compile.log
 -F
 tb.f
 -v93
