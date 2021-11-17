@@ -1,8 +1,6 @@
 *.log
 *.history
-INCA_libs/
 INCA_libs*
-.simvision/
 
 .metadata
 bin/
