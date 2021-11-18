@@ -3,6 +3,9 @@
 INCA_libs/
 INCA_libs*
 .simvision/
+*.key
+*.rpt
+*.txt
 
 .metadata
 bin/

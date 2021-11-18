@@ -62,13 +62,13 @@ module coverage(alu_bfm bfm);
 
 		a_leg: coverpoint A {
 			bins zeros = {'h00000000};
-			bins others= {['h000000001:'hFFFFFFFE]};
+			bins others= {['h000000001:'h7FFFFFFF]};
 			bins ones  = {-1};
 		}
 
 		b_leg: coverpoint B {
 			bins zeros = {'h00000000};
-			bins others= {['h000000001:'hFFFFFFFE]};
+			bins others= {['h000000001:'h7FFFFFFF]};
 			bins ones  = {-1};
 		}
 

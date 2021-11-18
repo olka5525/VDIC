@@ -56,15 +56,11 @@ module tester(alu_bfm bfm);
 		bit         signed  [31:0]  iB;
 		bit                 [3:0]   package_n;
 		bit                         crc_ok;
-		bit                 [3:0]   flags;
 		operation_t                op_set;
 		bit                 [9:0]   random_crc;
 		bit                 [9:0]   random_num;
 		bit         signed  [31:0]  result;
 		bit                 [3:0]   CRC;
-		bit                 [2:0]   crc_out;
-		bit                         done;
-
 
 		bfm.reset_alu();
 		repeat (10000) begin : tester_main

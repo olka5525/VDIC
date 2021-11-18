@@ -32,13 +32,9 @@ interface alu_bfm;
 	bit                 [2:0]   crc_out;
 	bit                         done='0;
 	bit                 [3:0]   CRC;
-
 	bit                         crc_ok;
 	bit                 [5:0]   error;
-
 	bit                         correct='0;
-	bit                 [9:0]   random_crc;
-	bit                 [9:0]   random_num;
 
 	operation_t        op_set;
 
