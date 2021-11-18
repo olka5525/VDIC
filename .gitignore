@@ -6,6 +6,9 @@ INCA_libs*
 *.key
 *.rpt
 *.txt
+xcelium.d
+.dvt
+.bpad
 
 .metadata
 bin/
