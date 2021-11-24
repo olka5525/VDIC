@@ -6,19 +6,11 @@ class tester;
 		bfm = b;
 	endfunction
 
-	protected function operation_t get_op();
-		bit [2:0] op_choice;
-		op_choice = 3'($random);
-		case (op_choice)
-			3'b000 : return and_op;
-			3'b001 : return  or_op;
-			3'b100 : return add_op;
-			3'b101 : return sub_op;
-			3'b011 : return rst_op;
-			3'b010 : return no_op;
-			3'b111 : return no_op;
-			3'b110 : return no_op;
-		endcase // case (op_choice)
+	function operation_t get_op();
+		operation_t op;
+		bit ok;
+		ok = std::randomize(op) with {op dist {and_op:=3, sub_op:=3,or_op:=3, add_op:=3, rst_op:=1, no_op:=1};};
+		return op;
 	endfunction : get_op
 
 	protected function bit [31:0] get_data();
