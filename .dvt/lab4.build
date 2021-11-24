@@ -1,0 +1,8 @@
+# Automatically identify and compile all the source files in the project directory.
+# DO NOT explicitly list files/directories in 'dvt_auto_init' sections. Use 'dvt_init' sections instead.
+#+dvt_init_auto
+-F lab04/tb.f -v93
+#lab04part1/lab04part1_factory.sv
+
+#lab01/mtm_Alu.vp
+#lab01/CRC4_D68.v
