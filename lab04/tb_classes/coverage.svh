@@ -2,12 +2,12 @@ class coverage;
 
 	virtual alu_bfm bfm;
 
-	bit         signed  [31:0]  A;
-	bit         signed  [31:0]  B;
-	bit                 [3:0]   package_n;
-	bit                         crc_ok;
-	bit                 [3:0]   flags;
-	operation_t                op_set;
+	protected bit         signed  [31:0]  A;
+	protected bit         signed  [31:0]  B;
+	protected bit                 [3:0]   package_n;
+	protected bit                         crc_ok;
+	protected bit                 [3:0]   flags;
+	protected operation_t                op_set;
 
 	covergroup op_cov;
 

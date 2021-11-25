@@ -6,7 +6,7 @@ class tester;
 		bfm = b;
 	endfunction
 
-	function operation_t get_op();
+	protected function operation_t get_op();
 		operation_t op;
 		bit ok;
 		ok = std::randomize(op) with {op dist {and_op:=3, sub_op:=3,or_op:=3, add_op:=3, rst_op:=1, no_op:=1};};
