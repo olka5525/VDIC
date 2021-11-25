@@ -61,14 +61,10 @@ class triangle extends shape;
 
 endclass
 
-class square extends shape;
-
-	function real get_area();
-		return width*width;
-	endfunction
+class square extends rectangle;
 
 	function new(real w, real h);
-		super.new(w,h);
+		super.new(w,w);
 	endfunction : new
 
 	function void print();
@@ -76,40 +72,6 @@ class square extends shape;
 	endfunction
 
 endclass
-
-class shape_factory;
-
-	static function shape make_shape(string shape_type,
-			real w, real h);
-		rectangle rectangle_h;
-		triangle triangle_h;
-		square square_h;
-		case (shape_type)
-			"rectangle" : begin
-				rectangle_h = new(w, h);
-				return rectangle_h;
-			end
-
-			"triangle" : begin
-				triangle_h = new(w, h);
-				return triangle_h;
-			end
-
-			"square" : begin
-				square_h = new(w, h);
-				return square_h;
-			end
-
-			default :
-				$fatal (1, {"No such shape: ", shape_type});
-
-		endcase // case (shape_type)
-
-	endfunction : make_shape
-
-endclass : shape_factory
-
-
 
 class shape_reporter #(type T = shape);
 
@@ -132,11 +94,43 @@ class shape_reporter #(type T = shape);
 
 endclass : shape_reporter
 
+class shape_factory;
+
+	static function shape make_shape(string shape_type,
+			real w, real h);
+		rectangle rectangle_h;
+		triangle triangle_h;
+		square square_h;
+		case (shape_type)
+			"rectangle" : begin
+				rectangle_h = new(w, h);
+				shape_reporter#(rectangle)::add_shape(rectangle_h);
+				return rectangle_h;
+			end
+
+			"triangle" : begin
+				triangle_h = new(w, h);
+				shape_reporter#(triangle)::add_shape(triangle_h);
+				return triangle_h;
+			end
+
+			"square" : begin
+				square_h = new(w, h);
+				shape_reporter#(square)::add_shape(square_h);
+				return square_h;
+			end
+
+			default :
+				$fatal (1, {"No such shape: ", shape_type});
+
+		endcase // case (shape_type)
+
+	endfunction : make_shape
+
+endclass : shape_factory
+
 
 module top;
-	square square_h;
-	rectangle rectangle_h;
-	triangle triangle_h;
 
 	initial begin
 		int file,code;
@@ -146,22 +140,9 @@ module top;
 		while(! $feof(file)==1) begin
 			code = $fscanf(file, "%s %s %s", shape_s, w, l);
 			if(code != -1) begin
-				case(shape_s)
-					"rectangle": begin
-						$cast(rectangle_h, shape_factory::make_shape(shape_s, w.atoreal(), l.atoreal()));
-						shape_reporter#(rectangle)::add_shape(rectangle_h);
-					end
-					"triangle": begin
-						$cast(triangle_h, shape_factory::make_shape(shape_s, w.atoreal(), l.atoreal()));
-						shape_reporter#(triangle)::add_shape(triangle_h);
-					end
-					"square": begin
-						$cast(square_h, shape_factory::make_shape(shape_s, w.atoreal(), l.atoreal()));
-						shape_reporter#(square)::add_shape(square_h);
-					end
-					default:
-						$fatal (1, {"No such shape: ", shape_s});
-				endcase
+
+			void'(shape_factory::make_shape(shape_s, w.atoreal(), l.atoreal()));
+
 			end
 		end
 		shape_reporter#(rectangle)::report_shape();
