@@ -13,9 +13,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-class add_test extends uvm_test;
+class corner_value_test extends uvm_test;
 
-    `uvm_component_utils(add_test)
+    `uvm_component_utils(corner_value_test)
 
     env env_h;
 
@@ -24,7 +24,7 @@ class add_test extends uvm_test;
 
         // set the factory to produce a add_tester whenever it would produce
         // a base_tester
-        base_tester::type_id::set_type_override(add_tester::get_type());
+        base_tester::type_id::set_type_override(corner_value_tester::get_type());
     endfunction : build_phase
 
     function new (string name, uvm_component parent);

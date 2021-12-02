@@ -13,9 +13,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-class add_tester extends random_tester;
+class corner_value_tester extends random_tester;
 
-	`uvm_component_utils(add_tester)
+	`uvm_component_utils(corner_value_tester)
 
 	function bit [31:0] get_data();
 		bit [4:0] random_num;
@@ -30,4 +30,4 @@ class add_tester extends random_tester;
 		super.new(name, parent);
 	endfunction : new
 
-endclass : add_tester
+endclass : corner_value_tester
