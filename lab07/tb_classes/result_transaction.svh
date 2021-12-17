@@ -66,7 +66,6 @@ class result_transaction extends uvm_transaction;
 		$cast(RHS, rhs);
 		
 		same = (result == RHS.result) &&
-		//(correct == RHS.correct) &&
 		(error == RHS.error) &&
 		(flags == RHS.flags) ;
 		return same;

@@ -41,13 +41,13 @@ class coverage extends uvm_subscriber #(command_transaction);
 
 		a_leg: coverpoint A {
 			bins zeros = {'h00000000};
-			bins others= {['h000000001 : 'h7FFFFFFE]};
+			//bins others= {['h000000001 : 'h7FFFFFFE]};
 			bins ones  = {-1};
 		}
 
 		b_leg: coverpoint B {
 			bins zeros = {'h00000000};
-			bins others= {['h000000001 : 'h7FFFFFFE]};
+			//bins others= {['h000000001 : 'h7FFFFFFE]};
 			bins ones  = {-1};
 		}
 
@@ -112,11 +112,6 @@ class coverage extends uvm_subscriber #(command_transaction);
 			bins B4_sub_00         = binsof (all_ops) intersect {sub_op} &&
 			(binsof (a_leg.zeros) && binsof (b_leg.zeros));
 
-
-
-
-			ignore_bins others_only =
-			binsof(a_leg.others) && binsof(b_leg.others);
 		}
 
 	endgroup
@@ -151,9 +146,6 @@ class coverage extends uvm_subscriber #(command_transaction);
 			(binsof (flag_leg.carry));
 
 			// #C2 simulate overflow flag
-
-			bins C2_overflow_add          = binsof (all_ops) intersect {add_op} &&
-			(binsof (flag_leg.overflow));
 
 			bins C2_overflow_sub          = binsof (all_ops) intersect {sub_op} &&
 			(binsof (flag_leg.overflow));
@@ -191,10 +183,16 @@ class coverage extends uvm_subscriber #(command_transaction);
 			(binsof (flag_leg.overflow));
 			ignore_bins and_overflow = binsof (all_ops) intersect {and_op} &&
 			(binsof (flag_leg.overflow));
+			ignore_bins add_overflow = binsof (all_ops) intersect {add_op} &&
+			(binsof (flag_leg.overflow));
 			ignore_bins or_carry = binsof (all_ops) intersect {or_op} &&
 			(binsof (flag_leg.carry));
 			ignore_bins and_carry = binsof (all_ops) intersect {and_op} &&
-			(binsof (flag_leg.carry));	
+			(binsof (flag_leg.carry));
+			ignore_bins rest_or = binsof (all_ops) intersect {or_op} &&
+			(binsof (flag_leg.rest));
+			ignore_bins rest_and = binsof (all_ops) intersect {and_op} &&
+			(binsof (flag_leg.rest));
 		}
 
 	endgroup
@@ -226,16 +224,16 @@ class coverage extends uvm_subscriber #(command_transaction);
 	endfunction : new
 
 	function void write(command_transaction t);
-			A           = t.A;
-			B           = t.B;
-			op_set      = t.op;
-			flags       = t.flags;
-			crc_ok      = t.crc_ok;
-			package_n   = t.package_n;
-			error_cov.sample();
-			zeros_or_ones_on_ops.sample();
-			op_cov.sample();
-			flag_cov.sample();
+		A           = t.A;
+		B           = t.B;
+		op_set      = t.op;
+		flags       = t.flags;
+		crc_ok      = t.crc_ok;
+		package_n   = t.package_n;
+		error_cov.sample();
+		zeros_or_ones_on_ops.sample();
+		op_cov.sample();
+		flag_cov.sample();
 	endfunction : write
 
 endclass

@@ -1,0 +1,6 @@
+# Automatically identify and compile all the source files in the project directory.
+# DO NOT explicitly list files/directories in 'dvt_auto_init' sections. Use 'dvt_init' sections instead.
+#+dvt_init_auto
+//-F lab07_example_2021/tb.f -v93
+//-F VDIC/lab07/tb.f -v93
+-F lab07/tb.f -v93

@@ -42,14 +42,6 @@ class env extends uvm_env;
         result_monitor_h.ap.connect(scoreboard_h.analysis_export);
 	endfunction : connect_phase
 
-//	function void end_of_elaboration_phase(uvm_phase phase);
-//		super.end_of_elaboration_phase(phase);
-//		$write("\033\[1;30m\033\[103m");
-//		$write("*** Created tester type: %s", random_tester_h.get_type_name());
-//		$write("\033\[0m\n");
-//		this.print();
-//	endfunction : end_of_elaboration_phase
-
 	function new (string name, uvm_component parent);
 		super.new(name,parent);
 	endfunction : new

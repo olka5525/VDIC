@@ -35,7 +35,6 @@ class command_transaction extends uvm_transaction;
 	constraint data {
 		A dist {'h00000000:=1, ['h000000001 : 'hFFFFFFFE]:/1, 'hFFFFFFFF:=1};
 		B dist {'h00000000:=1, ['h000000001 : 'hFFFFFFFE]:/1, 'hFFFFFFFF:=1};
-  //      op dist {and_op:=2, sub_op:=2,or_op:=2, add_op:=2, rst_op:=1, no_op:=1};
       	package_n 	dist{8:=1,9:=98,10:=1};	
       	crc_ok 		dist{1:=99, 0:=1};
 	}

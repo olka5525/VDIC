@@ -42,7 +42,6 @@ interface alu_bfm;
 
 	command_monitor             command_monitor_h;
 	result_monitor              result_monitor_h;
-//	result_transaction                    res;
 
 //------------------------------------------------------------------------------
 // reset task
@@ -53,7 +52,7 @@ interface alu_bfm;
 	`endif
 		start = 1'b0;
 		rst_n = 1'b0;
-		sin = '1;
+		sin = 1'b1;
 		@(negedge clk);
 		rst_n = 1'b1;
 	endtask
@@ -76,17 +75,11 @@ interface alu_bfm;
 		crc_ok = icrc_ok;
 
 		BA = {B,A};
-//		@(posedge clk);
 		start = 1'b1;
-//		@(posedge clk);
 		case(op_set)
 
 			rst_op: begin
 				reset_alu();
-			end
-			no_op: begin
-				@(negedge clk);
-				start = 1'b0;
 			end
 			default: begin
 				@(posedge clk);
@@ -133,7 +126,6 @@ interface alu_bfm;
 					flags='0;
 					correct = '0;
 				end
-//				@(posedge clk);
 				done ='1;
 				@(posedge clk);
 				

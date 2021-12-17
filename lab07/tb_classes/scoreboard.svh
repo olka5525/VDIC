@@ -209,7 +209,7 @@ class scoreboard extends uvm_subscriber #(result_transaction);
 		do
 			if (!cmd_f.try_get(cmd))
 				$fatal(1, "Missing command in self checker");
-		while ((cmd.op == no_op) || (cmd.op == rst_op));
+		while (cmd.op == rst_op);
 
 		//predicted = predict_result(cmd);
 
