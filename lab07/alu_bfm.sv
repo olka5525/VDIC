@@ -133,7 +133,7 @@ interface alu_bfm;
 					flags='0;
 					correct = '0;
 				end
-				@(posedge clk);
+//				@(posedge clk);
 				done ='1;
 				@(posedge clk);
 				
@@ -164,7 +164,7 @@ interface alu_bfm;
 		forever begin
 			@(posedge clk) ;
 			if (done)  begin
-				result_monitor_h.write_to_monitor(flags,crc_out,done,error,correct,result);
+				result_monitor_h.write_to_monitor(flags,crc_out,error,correct,result);
 				@(negedge done);
 			end
 		end
