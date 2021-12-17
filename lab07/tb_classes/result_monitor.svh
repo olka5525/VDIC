@@ -50,14 +50,11 @@ class result_monitor extends uvm_component;
 	function void write_to_monitor(
 			bit                 [3:0]   flags,
 			bit                 [2:0]   crc_out,
-			//bit                         done,
 			bit                 [5:0]   error,
-			bit                         correct,
 			bit         signed  [31:0]  result);
 		result_transaction result_t;
 		result_t        = new("result_t");
 		result_t.result = result;
-		result_t.correct = correct;
 		result_t.error = error;
 		result_t.crc_out = crc_out;
 		result_t.flags = flags;

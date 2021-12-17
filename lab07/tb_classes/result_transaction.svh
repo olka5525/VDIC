@@ -43,7 +43,7 @@ class result_transaction extends uvm_transaction;
 		assert($cast(copied_transaction_h,rhs)) else
 			`uvm_fatal("RESULT TRANSACTION","Failed cast in do_copy");
 		result = copied_transaction_h.result;
-		correct = copied_transaction_h.correct;
+		//correct = copied_transaction_h.correct;
 		error = copied_transaction_h.error;
 		crc_out = copied_transaction_h.crc_out;
 		flags = copied_transaction_h.flags;

@@ -25,7 +25,6 @@ class command_transaction extends uvm_transaction;
 	rand operation_t                 op;
 	rand bit                 [3:0]   package_n;
 	rand bit                         crc_ok;
-	bit                      [3:0]   CRC;
 	bit                      [3:0]   flags;
 
 //------------------------------------------------------------------------------
@@ -59,7 +58,6 @@ class command_transaction extends uvm_transaction;
 		op = copied_transaction_h.op;
 		package_n = copied_transaction_h.package_n;
 		crc_ok  = copied_transaction_h.crc_ok;
-		CRC  = copied_transaction_h.CRC;
 		flags = copied_transaction_h.flags;
 
 	endfunction : do_copy
@@ -92,7 +90,6 @@ class command_transaction extends uvm_transaction;
 			(compared_transaction_h.A == A) &&
 			(compared_transaction_h.B == B) &&
 			(compared_transaction_h.op == op) &&
-			(compared_transaction_h.CRC == CRC) &&
 			(compared_transaction_h.crc_ok == crc_ok) &&
 			(compared_transaction_h.package_n == package_n);
 
@@ -103,7 +100,7 @@ class command_transaction extends uvm_transaction;
 
 	function string convert2string();
 		string s;
-		s = $sformatf("A: %h  B: %h op: %s Package number: %d  CRC: %b crc_ok: %b", A, B, op.name(), package_n, CRC, crc_ok);
+		s = $sformatf("A: %h  B: %h op: %s Package number: %d crc_ok: %b", A, B, op.name(), package_n, crc_ok);
 		return s;
 	endfunction : convert2string
 

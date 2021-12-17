@@ -59,7 +59,7 @@ class tester extends uvm_component;
 
 		command    = command_transaction::type_id::create("command");
 
-		repeat ( 2000 ) begin : random_loop
+		repeat ( 500 ) begin : random_loop
 			assert(command.randomize());
 			command_port.put(command);
 		end

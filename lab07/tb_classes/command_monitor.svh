@@ -46,7 +46,7 @@ class command_monitor extends uvm_component;
 // access function for BMF
 //------------------------------------------------------------------------------
 
-	function void write_to_monitor(bit signed [31:0] A, bit signed [31:0] B, operation_t op, bit [3:0] package_n, bit [3:0] CRC, bit crc_ok, bit [3:0] flags);
+	function void write_to_monitor(bit signed [31:0] A, bit signed [31:0] B, operation_t op, bit [3:0] package_n, bit crc_ok, bit [3:0] flags);
 //        $display("COMMAND MONITOR: A:0x%2h B:0x%2h op: %s", cmd.A, cmd.B, cmd.op.name());
 		command_transaction cmd;
 		        `uvm_info("COMMAND MONITOR",$sformatf("MONITOR: A: %2h  B: %2h  op: %s",
@@ -56,7 +56,6 @@ class command_monitor extends uvm_component;
 		cmd.B  = B;
 		cmd.op = op;
 		cmd.crc_ok = crc_ok;;
-		cmd.CRC = CRC;
 		cmd.package_n = package_n;
 		cmd.flags = flags;
 		ap.write(cmd);
