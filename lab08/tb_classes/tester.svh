@@ -46,8 +46,6 @@ class tester extends uvm_component;
 //------------------------------------------------------------------------------
 
 	task run_phase(uvm_phase phase);
-//      bit                 [9:0]   random_crc;
-//      bit                 [9:0]   random_num;
 
 		command_transaction command;
 

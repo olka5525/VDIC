@@ -61,22 +61,25 @@ package alu_pkg;
 		$write(ctl);
 	endfunction
 
+// configs
+`include "env_config.svh" 
+`include "alu_agent_config.svh"
 
 `include "command_transaction.svh"
 `include "minmax_transaction.svh"
 `include "result_transaction.svh"
 
 `include "coverage.svh"
-`include "scoreboard.svh"
 `include "tester.svh"
+`include "scoreboard.svh"
 
 `include "driver.svh"
-
 `include "command_monitor.svh"
 `include "result_monitor.svh"
+`include "alu_agent.svh"
 `include "env.svh"
 
-`include "random_test.svh"
-`include "minmax_test.svh"
+// tests
+`include "dual_test.svh"
 
 endpackage : alu_pkg
