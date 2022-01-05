@@ -6,9 +6,13 @@ INCA_libs*
 *.key
 *.rpt
 *.txt
+*.err
+*.diag
 xcelium.d
-.dvt
+waves.shm/
+cov_work*/
 .bpad
+*~
 
 .metadata
 bin/
