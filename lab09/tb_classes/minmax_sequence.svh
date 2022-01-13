@@ -21,8 +21,6 @@ class minmax_sequence extends uvm_sequence #(sequence_item);
 //------------------------------------------------------------------------------
 
 	sequence_item req;
-	bit signed  [31:0]  iA;
-	bit signed  [31:0]  iB;
 
 //------------------------------------------------------------------------------
 // constructor
@@ -42,10 +40,7 @@ class minmax_sequence extends uvm_sequence #(sequence_item);
 
 		repeat (10) begin
 
-			void'(std::randomize(iA) with {iA dist {'h00000000:=1, ['h000000001 : 'hFFFFFFFE]:/1, 'hFFFFFFFF:=1}; });
-			void'(std::randomize(iB) with {iB dist {'h00000000:=1, ['h000000001 : 'hFFFFFFFE]:/1, 'hFFFFFFFF:=1}; });
-
-			`uvm_rand_send_with(req, {A == iA; B == iB;})
+			`uvm_rand_send_with(req, {A dist {'h00000000:=1, ['h000000001 : 'hFFFFFFFE]:/1, 'hFFFFFFFF:=1}; B dist {'h00000000:=1, ['h000000001 : 'hFFFFFFFE]:/1, 'hFFFFFFFF:=1};})
 		end
 	endtask : body
 
